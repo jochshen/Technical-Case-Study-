@@ -7,13 +7,12 @@ interface Products {
   title: string;
   images: string[];
   price: number;
+  category: string;
 }
 
 export function Store() {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [products, setProducts] = useState<Products[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [items, setItems] = useState<string[]>([]);
 
   useEffect(() => {
     // Make the API call and populate products state
@@ -29,14 +28,16 @@ export function Store() {
       });
   }, []); // Empty dependency array ensures useEffect runs only once on component mount
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: any) => {
     e.preventDefault(); // Prevent form submission
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
     console.log(searchQuery);
   };
-  const filteredProducts = products.filter((product) =>
-    String(product.title.toLowerCase()).includes(searchQuery.toLowerCase())
+  const filteredProducts = products.filter(
+    (product) =>
+      String(product.title.toLowerCase()).includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
     <>
@@ -45,7 +46,7 @@ export function Store() {
       <Form className="mb-3" onSubmit={(e) => e.preventDefault()}>
         <Form.Control
           type="text"
-          placeholder="Search by product ID"
+          placeholder="Search by name or categories (i.e. smartphone, skincare)"
           value={searchQuery}
           onChange={handleSearch}
         />
