@@ -1,39 +1,36 @@
-import { Button, Stack } from "react-bootstrap"
-import { useShoppingCart } from "../context/ShoppingCartContext"
-import { useState, useEffect } from "react"
-import { formatCurrency } from "../utilities/formatCurrency"
+import { Button, Stack } from "react-bootstrap";
+import { useShoppingCart } from "../context/ShoppingCartContext";
+import { useState, useEffect } from "react";
 
 type CartItemProps = {
-  id: number
-  quantity: number
-}
+  id: number;
+  quantity: number;
+};
 interface Product {
-    id: number;
-    title: string;
-    images: string[];
-    price: number;
-  }
-  
-export function CartItem({ id, quantity }: CartItemProps) {
-    const [products, setProducts] = useState<Product[]>([]);
+  id: number;
+  title: string;
+  images: string[];
+  price: number;
+}
 
-    useEffect(() => {
-      // Make the API call and populate products state
-      fetch("https://dummyjson.com/products")
-        .then((response) => response.json()) // Parse the JSON response
-        .then((data) => {
-          // Assuming data is an array of products
-          console.log(data);
-          setProducts(data.products);
-        })
-        .catch((error) => {
-          console.error("Error fetching products:", error);
-        });
-    }, []); // Empty dependency array ensures useEffect runs only once on component mount
-    
-  const { removeFromCart } = useShoppingCart()
-  const item = products.find(i => i.id === id)
-  if (item == null) return null
+export function CartItem({ id, quantity }: CartItemProps) {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch("https://dummyjson.com/products")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setProducts(data.products);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, []);
+
+  const { removeFromCart } = useShoppingCart();
+  const item = products.find((i) => i.id === id);
+  if (item == null) return null;
 
   return (
     <Stack direction="horizontal" gap={2} className="d-flex align-items-center">
@@ -51,10 +48,10 @@ export function CartItem({ id, quantity }: CartItemProps) {
           )}
         </div>
         <div className="text-muted" style={{ fontSize: ".75rem" }}>
-          {formatCurrency(item.price)}
+          ${item.price}
         </div>
       </div>
-      <div> {formatCurrency(item.price * quantity)}</div>
+      <div> ${item.price * quantity}</div>
       <Button
         variant="outline-danger"
         size="sm"
@@ -63,5 +60,5 @@ export function CartItem({ id, quantity }: CartItemProps) {
         &times;
       </Button>
     </Stack>
-  )
+  );
 }

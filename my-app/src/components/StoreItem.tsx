@@ -1,6 +1,5 @@
 import { Button, Card } from "react-bootstrap";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import { formatCurrency } from "../utilities/formatCurrency";
 
 export function StoreItem({ product }: any) {
   const {
@@ -21,9 +20,7 @@ export function StoreItem({ product }: any) {
       <Card.Body className="d-flex flex-column">
         <Card.Title className="d-flex justify-content-between align-items-baseline mb-4">
           <span className="fs-2">{product.title}</span>
-          <span className="ms-2 text-muted">
-            {formatCurrency(product.price)}
-          </span>
+          <span className="ms-2 text-muted">${product.price}</span>
         </Card.Title>
         <span>{product.description}</span>
         <div className="mt-auto">

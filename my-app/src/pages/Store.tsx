@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 import { StoreItem } from "../components/StoreItem";
 
@@ -15,25 +15,25 @@ export function Store() {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
-    // Make the API call and populate products state
     fetch("https://dummyjson.com/products")
-      .then((response) => response.json()) // Parse the JSON response
+      .then((response) => response.json())
       .then((data) => {
-        // Assuming data is an array of products
-        console.log(data);
         setProducts(data.products);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, []); // Empty dependency array ensures useEffect runs only once on component mount
+  }, []); 
 
+//   handle user input to search bar 
   const handleSearch = (e: any) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
     console.log(searchQuery);
   };
+
+//   create filtered array based on current searchQuery
   const filteredProducts = products.filter(
     (product) =>
       String(product.title.toLowerCase()).includes(searchQuery.toLowerCase()) ||
@@ -42,7 +42,6 @@ export function Store() {
   return (
     <>
       <h1>Store</h1>
-      {/* Search bar */}
       <Form className="mb-3" onSubmit={(e) => e.preventDefault()}>
         <Form.Control
           type="text"
@@ -53,7 +52,6 @@ export function Store() {
       </Form>
       {searchQuery === "" ? (
         <Row md={2} xs={1} lg={3} className="g-3">
-          {/* Render filtered products */}
           {products.map((product) => (
             <Col key={product.id}>
               <StoreItem product={product} />
